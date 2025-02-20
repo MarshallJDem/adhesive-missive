@@ -1,7 +1,7 @@
 <script src="https://integrations.missiveapp.com/missive.js"></script>
 <link href="https://integrations.missiveapp.com/missive.css" rel="stylesheet">
 
-<h1>Version 1</h1>
+<h1>Version 2</h1>
 
 <p id="demo"></p>
 
@@ -10,12 +10,14 @@
         Missive.fetchConversations(ids).then((conversations) => {
             if (conversations.length != 1) {
                 // Do nothing if multiple conversations are selected.
+
+                console.log("returning")
                 return
             }
 
             var link = conversations[0].link
             console.log(link)
-            console.log('Message subject:', link)
+            console.log('Link:', link)
             document.getElementById("demo").innerHTML = link;
             
         })
