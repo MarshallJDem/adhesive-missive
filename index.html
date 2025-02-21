@@ -3,7 +3,8 @@
 
 <h1 style="text-align: center;">Link Library</h1>
 
-<p id="demo"></p>
+<p style="text-align: center;" id="Loading"></p>
+
 <h2>Airtable Record</h2>
 <p id="AirtableRecord"></p>
 <h2>Sponsor Email</h2>
@@ -12,6 +13,20 @@
 <p id="CreatorEmail"></p>
 
 <script>
+
+    
+    Missive.fetchConversations(ids).then((conversations) => {
+            if (conversations.length != 1) {
+                // Do nothing if multiple conversations are selected.
+
+                console.log("returning")
+                return
+            }
+
+            var link = conversations[0].link
+            RefreshData(link);
+        })
+
     Missive.on('change:conversations', (ids) => {
         Missive.fetchConversations(ids).then((conversations) => {
             if (conversations.length != 1) {
@@ -22,29 +37,36 @@
             }
 
             var link = conversations[0].link
-
-            var queryDdata = {
-                missiveURL: link,
-            };
-
-            var searchParams = new URLSearchParams(queryDdata);
-
-            var apiUrl = 'https://adhesivemedia.app.n8n.cloud/webhook-test/bc8d5260-a018-4b71-bb96-66ce5bdcc682?' + searchParams.toString();
-            fetch(apiUrl).then(response => {
-                return response.json();
-            }).then(data => {
-                // Work with JSON data here
-                
-                document.getElementById("AirtableRecord").innerHTML = '<a href="' + data.AirtableRecordURL + '" target="_blank">' + data.AirtableRecordURL + '</a>';
-                document.getElementById("SponsorEmail").innerHTML = '<a href="' + data.SponsorEmailThreadURL + '" target="_blank">' + data.SponsorEmailThreadURL + '</a>';
-                document.getElementById("CreatorEmail").innerHTML = '<a href="' + data.CreatorEmailThreadURL + '" target="_blank">' + data.CreatorEmailThreadURL + '</a>';
-
-                console.log(data);
-            }).catch(err => {
-                console.log(err);
-            });
-            
+            RefreshData(link);
         })
     })
+
+    function RefreshData(link){
+
+        document.getElementById("Loading").innerHTML = 'Loading...'
+
+        var queryDdata = {
+            missiveURL: link,
+        };
+
+        var searchParams = new URLSearchParams(queryDdata);
+
+        var apiUrl = 'https://adhesivemedia.app.n8n.cloud/webhook-test/bc8d5260-a018-4b71-bb96-66ce5bdcc682?' + searchParams.toString();
+        fetch(apiUrl).then(response => {
+            return response.json();
+        }).then(data => {
+            // Work with JSON data here
+            
+            document.getElementById("AirtableRecord").innerHTML = '<a href="' + data.AirtableRecordURL + '" target="_blank">' + data.AirtableRecordURL + '</a>';
+            document.getElementById("SponsorEmail").innerHTML = '<a href="' + data.SponsorEmailThreadURL + '" target="_blank">' + data.SponsorEmailThreadURL + '</a>';
+            document.getElementById("CreatorEmail").innerHTML = '<a href="' + data.CreatorEmailThreadURL + '" target="_blank">' + data.CreatorEmailThreadURL + '</a>';
+
+            document.getElementById("Loading").innerHTML = ''
+            console.log(data);
+        }).catch(err => {
+            document.getElementById("Loading").innerHTML = 'Error! ' + err.toString();
+            console.log(err);
+        });
+    }
     
 </script>
