@@ -1,9 +1,15 @@
 <script src="https://integrations.missiveapp.com/missive.js"></script>
 <link href="https://integrations.missiveapp.com/missive.css" rel="stylesheet">
 
-<h1>Version 2</h1>
+<h1 style="text-align: center;">Link Library</h1>
 
 <p id="demo"></p>
+<h2>Airtable Record</h2>
+<p id="AirtableRecord"></p>
+<h2>Sponsor Email</h2>
+<p id="SponsorEmail"></p>
+<h2>Creator Email</h2>
+<p id="CreatorEmail"></p>
 
 <script>
     Missive.on('change:conversations', (ids) => {
@@ -16,10 +22,29 @@
             }
 
             var link = conversations[0].link
-            console.log(link)
-            console.log('Link:', link)
-            document.getElementById("demo").innerHTML = link;
+
+            var queryDdata = {
+                missiveURL: link,
+            };
+
+            var searchParams = new URLSearchParams(queryDdata);
+
+            var apiUrl = 'https://adhesivemedia.app.n8n.cloud/webhook-test/bc8d5260-a018-4b71-bb96-66ce5bdcc682?' + searchParams.toString();
+            fetch(apiUrl).then(response => {
+                return response.json();
+            }).then(data => {
+                // Work with JSON data here
+                
+                document.getElementById("AirtableRecord").innerHTML = '<a href="' + data.AirtableRecordURL + '" target="_blank">' + data.AirtableRecordURL + '</a>';
+                document.getElementById("SponsorEmail").innerHTML = '<a href="' + data.SponsorEmailThreadURL + '" target="_blank">' + data.SponsorEmailThreadURL + '</a>';
+                document.getElementById("CreatorEmail").innerHTML = '<a href="' + data.CreatorEmailThreadURL + '" target="_blank">' + data.CreatorEmailThreadURL + '</a>';
+
+                console.log(data);
+            }).catch(err => {
+                console.log(err);
+            });
             
         })
     })
+    
 </script>
