@@ -30,6 +30,11 @@
     function RefreshData(link){
 
         document.getElementById("Loading").innerHTML = 'Loading...'
+        document.getElementById("AirtableRecord").innerHTML = '';
+        document.getElementById("SponsorEmail").innerHTML = '';
+        document.getElementById("CreatorEmail").innerHTML = '';
+
+
 
         var queryDdata = {
             missiveURL: link,
