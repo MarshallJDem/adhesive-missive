@@ -13,20 +13,6 @@
 <p id="CreatorEmail"></p>
 
 <script>
-
-
-    Missive.fetchConversations(ids).then((conversations) => {
-            if (conversations.length != 1) {
-                // Do nothing if multiple conversations are selected.
-
-                console.log("returning")
-                return
-            }
-
-            var link = conversations[0].link
-            RefreshData(link);
-        })
-
     Missive.on('change:conversations', (ids) => {
         Missive.fetchConversations(ids).then((conversations) => {
             if (conversations.length != 1) {
